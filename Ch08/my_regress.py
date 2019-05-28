@@ -11,9 +11,9 @@ def load_dataset(filename):
             line_arr = line.strip().split('\t')
             feats = []
             for i in range(num_feat):
-                feats.append(float(line_arr[i]))
+                feats.append(line_arr[i])
             data_mat.append(feats)
-            labels_mat.append(float(line_arr[-1]))
+            labels_mat.append(line_arr[-1])
         return data_mat, labels_mat
 
 
@@ -106,14 +106,20 @@ def test_1():
     fig.show()
 
 if __name__ == '__main__':
-    data_arr, labels_arr = load_dataset('abalone.txt')
-    # w_mat = ridge_test(data_arr, labels_arr)
-    # fig = plt.figure()
-    # ax = fig.add_subplot(111)
-    # ax.plot(w_mat)
-    # fig.show()
-    stage_wise(data_arr, labels_arr)
-
-
+    # data_arr, labels_arr = load_dataset('abalone.txt')
+    # # w_mat = ridge_test(data_arr, labels_arr)
+    # # fig = plt.figure()
+    # # ax = fig.add_subplot(111)
+    # # ax.plot(w_mat)
+    # # fig.show()
+    # stage_wise(data_arr, labels_arr)
+    data_mat, labels_mat = load_dataset('money.txt')
+    data_mat = np.mat(data_mat);
+    labels_mat = np.mat(labels_mat)
+    data = np.hstack((data_mat, labels_mat.T))
+    money_count = np.mat(np.zeros(shape=(data.shape[0], 1)))
+    for i in range(0, data.shape[0]):
+        money_count[i, :] = data[0:i+1, -1].astype(np.float64).sum()
+    data = np.hstack((data_mat, money_count))
 
 
